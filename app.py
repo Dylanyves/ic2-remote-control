@@ -25,7 +25,7 @@ def controller():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     
-    data_from_button = 'OFF'
+    data_from_button = "OFF"
     if request.method == 'POST':
         data_from_button = request.form.get('button_data')
         direction = request.form.get('direction')

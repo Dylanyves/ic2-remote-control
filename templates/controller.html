@@ -84,6 +84,8 @@
     <!-- Other HTML code -->
 
     <script>
+        var data_from_button = "{{data_from_button}}";
+
         function sendData(dataToSend) {
             fetch("/controller", {
                 method: "POST",
@@ -94,8 +96,7 @@
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    console.log("Successfully sent to server");
-                    console.log("Received data:", data);
+                    data_from_button = data.data_from_button;
 
                     // Update the status text dynamically
                     document.getElementById("statusParagraph").innerText = "Status: " + data.data_from_button;
@@ -114,6 +115,7 @@
         }
 
         function move(direction) {
+            console.log(direction);
             fetch("/controller", {
                 method: "POST",
                 headers: {
@@ -124,6 +126,9 @@
         }
 
         document.addEventListener('keydown', function (event) {
+            if (data_from_button === "OFF") {
+                return;
+            }
             switch (event.key) {
                 case 'ArrowUp':
                     event.preventDefault();
