@@ -26,17 +26,21 @@ def controller():
         return redirect(url_for('login'))
     
     data_from_button = "OFF"
+    mode = "AUTO"
     if request.method == 'POST':
         data_from_button = request.form.get('button_data')
+        mode = request.form.get('mode')
         direction = request.form.get('direction')
         
-        if direction:
-            print(direction)
+        if mode:
+            print(mode)
         if data_from_button:
             print(data_from_button)
+        if direction:
+            print(direction)
 
-        return jsonify({'data_from_button': data_from_button})
-    return render_template('controller.html', data_from_button=data_from_button)
+        return jsonify({'data_from_button': data_from_button, 'mode':mode})
+    return render_template('controller.html', data_from_button=data_from_button, mode=mode)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

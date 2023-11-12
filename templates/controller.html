@@ -25,33 +25,61 @@
 </head>
 <body>
     <h1>Controller Page</h1>
-    <p id="statusParagraph">Status: {{data_from_button}}</p>
+    <div style="margin-bottom: 30px;">
+        <p id="motorStatus">Motors: {{data_from_button}}</p>
+        <button
+            id="onButton"
+            {%
+            if
+            data_from_button=="ON"
+            %}disabled{%
+            endif
+            %}
+            onclick="motorController('ON')"
+        >
+            ON
+        </button>
+        <button
+            id="offButton"
+            {%
+            if
+            data_from_button=="OFF"
+            %}disabled{%
+            endif
+            %}
+            onclick="motorController('OFF')"
+        >
+            OFF
+        </button>
+    </div>
 
-    <button
-        id="onButton"
-        {%
-        if
-        data_from_button=="ON"
-        %}disabled{%
-        endif
-        %}
-        onclick="sendData('ON')"
-    >
-        ON
-    </button>
-
-    <button
-        id="offButton"
-        {%
-        if
-        data_from_button=="OFF"
-        %}disabled{%
-        endif
-        %}
-        onclick="sendData('OFF')"
-    >
-        OFF
-    </button>
+    <div>
+        <p id="modeStatus">Mode: {{mode}}</p>
+        <button
+            id="manualButton"
+            {%
+            if
+            mode=="MANUAL"
+            %}disabled{%
+            endif
+            %}
+            onclick="modeController('MANUAL')"
+        >
+            MANUAL
+        </button>
+        <button
+            id="autoButton"
+            {%
+            if
+            mode=="AUTO"
+            %}disabled{%
+            endif
+            %}
+            onclick="modeController('AUTO')"
+        >
+            AUTOMATIC
+        </button>
+    </div>
 
     <div class="container">
         <div class="control-buttons">
@@ -85,8 +113,9 @@
 
     <script>
         var data_from_button = "{{data_from_button}}";
+        var mode = "{{mode}}";
 
-        function sendData(dataToSend) {
+        function motorController(dataToSend) {
             fetch("/controller", {
                 method: "POST",
                 headers: {
@@ -98,14 +127,11 @@
                 .then((data) => {
                     data_from_button = data.data_from_button;
 
-                    // Update the status text dynamically
-                    document.getElementById("statusParagraph").innerText = "Status: " + data.data_from_button;
+                    document.getElementById("motorStatus").innerText = "Motors: " + data.data_from_button;
 
-                    // Disable/enable buttons based on the received data
                     document.getElementById("onButton").disabled = data.data_from_button === "ON";
                     document.getElementById("offButton").disabled = data.data_from_button === "OFF";
 
-                    // Disable arrow buttons if the status is "OFF"
                     const arrowButtons = document.querySelectorAll('.arrow-button');
                     arrowButtons.forEach(button => button.disabled = data.data_from_button === "OFF");
                 })
@@ -114,8 +140,32 @@
                 });
         }
 
+        function modeController(modeType) {
+            fetch("/controller", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: "mode=" + encodeURIComponent(modeType),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    mode = data.mode;
+
+                    document.getElementById("modeStatus").innerText = "Mode: " + data.mode;
+
+                    document.getElementById("manualButton").disabled = data.mode === "MANUAL";
+                    document.getElementById("autoButton").disabled = data.mode === "AUTO";
+                    
+                    const arrowButtons = document.querySelectorAll('.arrow-button');
+                    arrowButtons.forEach(button => button.disabled = data.mode === "AUTO");
+                })
+                .catch((error) => {
+                    console.error("Error sending data to server:", error);
+                });
+        }
+
         function move(direction) {
-            console.log(direction);
             fetch("/controller", {
                 method: "POST",
                 headers: {
@@ -126,7 +176,7 @@
         }
 
         document.addEventListener('keydown', function (event) {
-            if (data_from_button === "OFF") {
+            if (data_from_button === "OFF" || mode === "AUTO") {
                 return;
             }
             switch (event.key) {
