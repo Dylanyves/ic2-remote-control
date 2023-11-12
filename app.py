@@ -1,5 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
-
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 app = Flask(__name__)
 app.secret_key = 'secret'
 
@@ -29,9 +28,14 @@ def controller():
     data_from_button = 'OFF'
     if request.method == 'POST':
         data_from_button = request.form.get('button_data')
-        print(data_from_button)
-        return render_template('controller.html', data_from_button=data_from_button)
+        direction = request.form.get('direction')
+        
+        if direction:
+            print(direction)
+        if data_from_button:
+            print(data_from_button)
 
+        return jsonify({'data_from_button': data_from_button})
     return render_template('controller.html', data_from_button=data_from_button)
 
 if __name__ == '__main__':

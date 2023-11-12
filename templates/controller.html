@@ -1,66 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Controller</title>
-    </head>
-    <body>
-        <h1>Controller Page</h1>
-        <p>Status: {{data_from_button}}</p>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Controller</title>
+    <style>
+        .container {
+            margin-top: 150px;
+        }
 
-        <button
-            id="onButton"
-            {%
-            if
-            data_from_button
-            !="ON"
-            %}disabled{%
-            endif
-            %}
-            onclick="sendData('ON')"
-        >
-            ON
-        </button>
+        .control-buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
 
-        <button
-            id="offButton"
-            {%
-            if
-            data_from_button
-            !="OFF"
-            %}disabled{%
-            endif
-            %}
-            onclick="sendData('OFF')"
-        >
-            OFF
-        </button>
+        .arrow-button {
+            font-size: 20px;
+            padding: 10px;
+            cursor: pointer;
+            margin: 5px; /* Adjust this margin to control the spacing between buttons */
+        }
+    </style>
+</head>
+<body>
+    <h1>Controller Page</h1>
+    <p id="statusParagraph">Status: {{data_from_button}}</p>
 
-        <script>
-            function sendData(dataToSend) {
-                fetch("/controller", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded",
-                    },
-                    body: "button_data=" + encodeURIComponent(dataToSend),
+    <button
+        id="onButton"
+        {%
+        if
+        data_from_button=="ON"
+        %}disabled{%
+        endif
+        %}
+        onclick="sendData('ON')"
+    >
+        ON
+    </button>
+
+    <button
+        id="offButton"
+        {%
+        if
+        data_from_button=="OFF"
+        %}disabled{%
+        endif
+        %}
+        onclick="sendData('OFF')"
+    >
+        OFF
+    </button>
+
+    <div class="container">
+        <div class="control-buttons">
+            <button class="arrow-button" onmousedown="move('up')" {%
+                if data_from_button=="OFF"
+                %}disabled{%
+                endif
+            %}>↑</button>
+        </div>
+
+        <div class="control-buttons">
+            <button class="arrow-button" onmousedown="move('left')" {%
+                if data_from_button=="OFF"
+                %}disabled{%
+                endif
+            %}>←</button>
+            <button class="arrow-button" onmousedown="move('down')" {%
+                if data_from_button=="OFF"
+                %}disabled{%
+                endif
+            %}>↓</button>
+            <button class="arrow-button" onmousedown="move('right')" {%
+                if data_from_button=="OFF"
+                %}disabled{%
+                endif
+            %}>→</button>
+        </div>
+    </div>
+
+    <!-- Other HTML code -->
+
+    <script>
+        function sendData(dataToSend) {
+            fetch("/controller", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: "button_data=" + encodeURIComponent(dataToSend),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log("Successfully sent to server");
+                    console.log("Received data:", data);
+
+                    // Update the status text dynamically
+                    document.getElementById("statusParagraph").innerText = "Status: " + data.data_from_button;
+
+                    // Disable/enable buttons based on the received data
+                    document.getElementById("onButton").disabled = data.data_from_button === "ON";
+                    document.getElementById("offButton").disabled = data.data_from_button === "OFF";
+
+                    // Disable arrow buttons if the status is "OFF"
+                    const arrowButtons = document.querySelectorAll('.arrow-button');
+                    arrowButtons.forEach(button => button.disabled = data.data_from_button === "OFF");
                 })
-                    .then((response) => response.text())
-                    .then((data) => {
-                        console.log("Successfully sent to server");
-                        console.log("Received data:", data);
+                .catch((error) => {
+                    console.error("Error sending data to server:", error);
+                });
+        }
 
-                        // Disable/enable buttons based on the received data
-                        document.getElementById("onButton").disabled =
-                            data === "ON";
-                        document.getElementById("offButton").disabled =
-                            data === "OFF";
-                    })
-                    .catch((error) => {
-                        console.error("Error sending data to server:", error);
-                    });
+        function move(direction) {
+            fetch("/controller", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: "direction=" + encodeURIComponent(direction),
+            }).then((response) => response.json())
+        }
+
+        document.addEventListener('keydown', function (event) {
+            switch (event.key) {
+                case 'ArrowUp':
+                    event.preventDefault();
+                    move('up');
+                    break;
+                case 'ArrowDown':
+                    event.preventDefault();
+                    move('down');
+                    break;
+                case 'ArrowLeft':
+                    event.preventDefault();
+                    move('left');
+                    break;
+                case 'ArrowRight':
+                    event.preventDefault();
+                    move('right');
+                    break;
             }
-        </script>
-    </body>
+        });
+
+    </script>
+</body>
 </html>
