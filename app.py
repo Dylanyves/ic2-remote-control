@@ -25,22 +25,26 @@ def controller():
     if not session.get('logged_in'):
         return redirect(url_for('login'))
     
-    data_from_button = "OFF"
-    mode = "AUTO"
+    motorStatus = "OFF"
+    modeStatus = "AUTO"
+    powerStatus = "LOW"
     if request.method == 'POST':
-        data_from_button = request.form.get('button_data')
-        mode = request.form.get('mode')
+        motorStatus = request.form.get('button_data')
+        modeStatus = request.form.get('modeStatus')
         direction = request.form.get('direction')
+        powerStatus = request.form.get('powerStatus')
         
-        if mode:
-            print(mode)
-        if data_from_button:
-            print(data_from_button)
+        if motorStatus:
+            print(motorStatus)
+        if modeStatus:
+            print(modeStatus)
+        if powerStatus:
+            print(powerStatus)
         if direction:
             print(direction)
 
-        return jsonify({'data_from_button': data_from_button, 'mode':mode})
-    return render_template('controller.html', data_from_button=data_from_button, mode=mode)
+        return jsonify({'motorStatus': motorStatus, 'modeStatus':modeStatus, 'powerStatus':powerStatus})
+    return render_template('controller.html', motorStatus=motorStatus, modeStatus=modeStatus, powerStatus=powerStatus)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Controller</title>
+    <title>IC2 Controller</title>
     <style>
         .container {
             margin-top: 100px;
@@ -26,12 +26,12 @@
 <body>
     <h1>Controller Page</h1>
     <div style="margin-bottom: 30px;">
-        <p id="motorStatus">Motors: {{data_from_button}}</p>
+        <p id="motorStatus">Motors: {{motorStatus}}</p>
         <button
             id="onButton"
             {%
             if
-            data_from_button=="ON"
+            motorStatus=="ON"
             %}disabled{%
             endif
             %}
@@ -43,7 +43,7 @@
             id="offButton"
             {%
             if
-            data_from_button=="OFF"
+            motorStatus=="OFF"
             %}disabled{%
             endif
             %}
@@ -53,13 +53,13 @@
         </button>
     </div>
 
-    <div>
-        <p id="modeStatus">Mode: {{mode}}</p>
+    <div style="margin-bottom: 30px;">
+        <p id="modeStatus">Mode: {{modeStatus}}</p>
         <button
             id="manualButton"
             {%
             if
-            mode=="MANUAL"
+            modeStatus=="MANUAL"
             %}disabled{%
             endif
             %}
@@ -71,7 +71,7 @@
             id="autoButton"
             {%
             if
-            mode=="AUTO"
+            modeStatus=="AUTO"
             %}disabled{%
             endif
             %}
@@ -81,10 +81,50 @@
         </button>
     </div>
 
+    <div>
+        <p id="powerStatus">Power: {{powerStatus}}</p>
+        <button
+            id="lowButton"
+            {%
+            if
+            powerStatus=="LOW"
+            %}disabled{%
+            endif
+            %}
+            onclick="powerController('LOW')"
+        >
+            LOW
+        </button>
+        <button
+            id="midButton"
+            {%
+            if
+            powerStatus=="MID"
+            %}disabled{%
+            endif
+            %}
+            onclick="powerController('MID')"
+        >
+            MID
+        </button>
+        <button
+        id="highButton"
+        {%
+        if
+        powerStatus=="HIGH"
+        %}disabled{%
+        endif
+        %}
+        onclick="powerController('HIGH')"
+    >
+        HIGH
+    </button>
+    </div>
+
     <div class="container">
         <div class="control-buttons">
             <button class="arrow-button" onmousedown="move('up')" {%
-                if data_from_button=="OFF"
+                if motorStatus=="OFF"
                 %}disabled{%
                 endif
             %}>↑</button>
@@ -92,17 +132,17 @@
 
         <div class="control-buttons">
             <button class="arrow-button" onmousedown="move('left')" {%
-                if data_from_button=="OFF"
+                if motorStatus=="OFF"
                 %}disabled{%
                 endif
             %}>←</button>
             <button class="arrow-button" onmousedown="move('down')" {%
-                if data_from_button=="OFF"
+                if motorStatus=="OFF"
                 %}disabled{%
                 endif
             %}>↓</button>
             <button class="arrow-button" onmousedown="move('right')" {%
-                if data_from_button=="OFF"
+                if motorStatus=="OFF"
                 %}disabled{%
                 endif
             %}>→</button>
@@ -112,8 +152,9 @@
     <!-- Other HTML code -->
 
     <script>
-        var data_from_button = "{{data_from_button}}";
-        var mode = "{{mode}}";
+        var motorStatus = "{{motorStatus}}";
+        var modeStatus = "{{modeStatus}}";
+        var powerStatus = "{{powerStatus}}";
 
         function motorController(dataToSend) {
             fetch("/controller", {
@@ -125,15 +166,15 @@
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    data_from_button = data.data_from_button;
+                    motorStatus = data.motorStatus;
 
-                    document.getElementById("motorStatus").innerText = "Motors: " + data.data_from_button;
+                    document.getElementById("motorStatus").innerText = "Motors: " + data.motorStatus;
 
-                    document.getElementById("onButton").disabled = data.data_from_button === "ON";
-                    document.getElementById("offButton").disabled = data.data_from_button === "OFF";
+                    document.getElementById("onButton").disabled = data.motorStatus === "ON";
+                    document.getElementById("offButton").disabled = data.motorStatus === "OFF";
 
                     const arrowButtons = document.querySelectorAll('.arrow-button');
-                    arrowButtons.forEach(button => button.disabled = (data.data_from_button === "OFF" || mode === "AUTO"));
+                    arrowButtons.forEach(button => button.disabled = (data.motorStatus === "OFF" || modeStatus === "AUTO"));
                 })
                 .catch((error) => {
                     console.error("Error sending data to server:", error);
@@ -146,19 +187,42 @@
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
                 },
-                body: "mode=" + encodeURIComponent(modeType),
+                body: "modeStatus=" + encodeURIComponent(modeType),
             })
                 .then((response) => response.json())
                 .then((data) => {
-                    mode = data.mode;
+                    modeStatus = data.modeStatus;
 
-                    document.getElementById("modeStatus").innerText = "Mode: " + data.mode;
+                    document.getElementById("modeStatus").innerText = "Mode: " + data.modeStatus;
 
-                    document.getElementById("manualButton").disabled = data.mode === "MANUAL";
-                    document.getElementById("autoButton").disabled = data.mode === "AUTO";
+                    document.getElementById("manualButton").disabled = data.modeStatus === "MANUAL";
+                    document.getElementById("autoButton").disabled = data.modeStatus === "AUTO";
                     
                     const arrowButtons = document.querySelectorAll('.arrow-button');
-                    arrowButtons.forEach(button => button.disabled = (data_from_button === "OFF" || data.mode === "AUTO"));
+                    arrowButtons.forEach(button => button.disabled = (motorStatus === "OFF" || data.modeStatus === "AUTO"));
+                })
+                .catch((error) => {
+                    console.error("Error sending data to server:", error);
+                });
+        }
+
+        function powerController(power) {
+            fetch("/controller", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: "powerStatus=" + encodeURIComponent(power),
+            })
+                .then((response) => response.json())
+                .then((data) => {
+                    powerStatus = data.powerStatus;
+
+                    document.getElementById("powerStatus").innerText = "Power: " + data.powerStatus;
+
+                    document.getElementById("lowButton").disabled = data.powerStatus === "LOW";
+                    document.getElementById("midButton").disabled = data.powerStatus === "MID";
+                    document.getElementById("highButton").disabled = data.powerStatus === "HIGH";
                 })
                 .catch((error) => {
                     console.error("Error sending data to server:", error);
@@ -176,17 +240,17 @@
         }
 
         document.addEventListener('keydown', function (event) {
-            if (data_from_button === "OFF" || mode === "AUTO") {
+            if (motorStatus === "OFF" || modeStatus === "AUTO") {
                 return;
             }
             switch (event.key) {
                 case 'ArrowUp':
                     event.preventDefault();
-                    move('up');
+                    move('forward');
                     break;
                 case 'ArrowDown':
                     event.preventDefault();
-                    move('down');
+                    move('backward');
                     break;
                 case 'ArrowLeft':
                     event.preventDefault();
