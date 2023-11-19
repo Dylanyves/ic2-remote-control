@@ -1,0 +1,20 @@
+.container {
+    margin-top: 100px;
+}
+
+.control-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+}
+
+.arrow-button {
+    width: 7vh;
+    font-size: 20px;
+    padding: 10px;
+    cursor: pointer;
+    margin: 5px; /* Adjust this margin to control the spacing between buttons */
+}
+
+
+

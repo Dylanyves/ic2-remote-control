@@ -4,267 +4,152 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link href="./css/style.css" rel="stylesheet">
     <title>IC2 Controller</title>
-    <style>
-        .container {
-            margin-top: 100px;
-        }
-
-        .control-buttons {
-            display: flex;
-            justify-content: center;
-            margin-top: 10px;
-        }
-
-        .arrow-button {
-            font-size: 20px;
-            padding: 10px;
-            cursor: pointer;
-            margin: 5px; /* Adjust this margin to control the spacing between buttons */
-        }
-    </style>
 </head>
-<body>
-    <h1>Controller Page</h1>
-    <div style="margin-bottom: 30px;">
-        <p id="motorStatus">Motors: {{motorStatus}}</p>
-        <button
-            id="onButton"
-            {%
-            if
-            motorStatus=="ON"
-            %}disabled{%
-            endif
-            %}
-            onclick="motorController('ON')"
-        >
-            ON
-        </button>
-        <button
-            id="offButton"
-            {%
-            if
-            motorStatus=="OFF"
-            %}disabled{%
-            endif
-            %}
-            onclick="motorController('OFF')"
-        >
-            OFF
-        </button>
-    </div>
-
-    <div style="margin-bottom: 30px;">
-        <p id="modeStatus">Mode: {{modeStatus}}</p>
-        <button
-            id="manualButton"
-            {%
-            if
-            modeStatus=="MANUAL"
-            %}disabled{%
-            endif
-            %}
-            onclick="modeController('MANUAL')"
-        >
-            MANUAL
-        </button>
-        <button
-            id="autoButton"
-            {%
-            if
-            modeStatus=="AUTO"
-            %}disabled{%
-            endif
-            %}
-            onclick="modeController('AUTO')"
-        >
-            AUTOMATIC
-        </button>
-    </div>
-
-    <div>
-        <p id="powerStatus">Power: {{powerStatus}}</p>
-        <button
-            id="lowButton"
-            {%
-            if
-            powerStatus=="LOW"
-            %}disabled{%
-            endif
-            %}
-            onclick="powerController('LOW')"
-        >
-            LOW
-        </button>
-        <button
-            id="midButton"
-            {%
-            if
-            powerStatus=="MID"
-            %}disabled{%
-            endif
-            %}
-            onclick="powerController('MID')"
-        >
-            MID
-        </button>
-        <button
-        id="highButton"
-        {%
-        if
-        powerStatus=="HIGH"
-        %}disabled{%
-        endif
-        %}
-        onclick="powerController('HIGH')"
-    >
-        HIGH
-    </button>
-    </div>
-
+<body class="d-flex align-items-center justify-content-center" style="min-height: 90vh;">
     <div class="container">
-        <div class="control-buttons">
-            <button class="arrow-button" onmousedown="move('up')" {%
-                if motorStatus=="OFF"
-                %}disabled{%
-                endif
-            %}>↑</button>
-        </div>
+        <h1 class="external-title text-center" style="font-size: 15vh; margin-bottom: 7vh; box-shadow: 0px 2px 17px 0px rgba(0, 0, 0, 0.2); padding: 2vh; border-radius: 100px; color: #FFF; background-color: #0d6efd;">Controller Page</h1>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card border-0 mx-auto" style="max-width: 400px; height: 50vh; box-shadow: 0px 2px 17px 0px rgba(0, 0, 0, 0.2);">
+                    <div class="card-body">
+                        <div style="margin-bottom: 30px;">
+                            <p id="motorStatus">Motors: {{motorStatus}}</p>
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-secondary">
+                                    <input class= "toggle1" type="radio" name="options1" id="onButton" autocomplete="off" 
+                                        {%
+                                        if
+                                        motorStatus=="ON"
+                                        %}disabled{%
+                                        endif
+                                        %}
+                                        onclick="motorController('ON')"
+                                    > ON
+                                  </label>
+                                <label class="btn btn-secondary btn-info">
+                                    <input class= "toggle1" type="radio" name="options1" id="offButton" autocomplete="off "
+                                        {%
+                                        if
+                                        motorStatus=="OFF"
+                                        %}disabled{%
+                                        endif
+                                        %}
+                                        onclick="motorController('OFF')"
+                                        checked
+                                    > OFF
+                                </label>
+                            </div>
+                        </div>
 
-        <div class="control-buttons">
-            <button class="arrow-button" onmousedown="move('left')" {%
-                if motorStatus=="OFF"
-                %}disabled{%
-                endif
-            %}>←</button>
-            <button class="arrow-button" onmousedown="move('down')" {%
-                if motorStatus=="OFF"
-                %}disabled{%
-                endif
-            %}>↓</button>
-            <button class="arrow-button" onmousedown="move('right')" {%
-                if motorStatus=="OFF"
-                %}disabled{%
-                endif
-            %}>→</button>
+                        <div style="margin-bottom: 30px;">
+                            <p id="modeStatus">Mode: {{modeStatus}}</p>
+                            <div class="btn-group btn-group-toggle toggle2" data-toggle="buttons">
+                                <label class="btn btn-secondary btn-info">
+                                    <input class= "toggle2" type="radio" name="options2" id="manualButton" autocomplete="off" checked
+                                    {%
+                                        if
+                                        motorStatus=="MANUAL"
+                                        %}disabled{%
+                                        endif
+                                        %}
+                                        onclick="motorController('MANUAL')"
+                                    > MANUAL
+                                  </label>
+                                <label class="btn btn-secondary">
+                                    <input class= "toggle2" type="radio" name="options2" id="autoButton" autocomplete="off "
+                                        {%
+                                        if
+                                        motorStatus=="AUTOMATIC"
+                                        %}disabled{%
+                                        endif
+                                        %}
+                                        onclick="motorController('AUTOMATIC')"
+                                    > AUTOMATIC
+                                </label>
+                            </div>
+                        </div>
+
+                        <div>
+                            <p id="powerStatus">Power: {{powerStatus}}</p>
+                            <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                                <label class="btn btn-secondary btn-info">
+                                    <input class= "toggle3" type="radio" name="options3" id="lowButton" autocomplete="off" checked
+                                        {%
+                                        if
+                                        motorStatus=="LOW"
+                                        %}disabled{%
+                                        endif
+                                        %}
+                                        onclick="motorController('LOW')"
+
+                                    > LOW
+                                  </label>
+                                <label class="btn btn-secondary">
+                                    <input class= "toggle3" type="radio" name="options3" id="midButton" autocomplete="off "
+                                        {%
+                                        if
+                                        motorStatus=="MID"
+                                        %}disabled{%
+                                        endif
+                                        %}
+                                        onclick="motorController('MID')"
+                                    > MID
+                                </label>
+                                <label class="btn btn-secondary">
+                                    <input class= "toggle3" type="radio" name="options3" id="highButton" autocomplete="off "
+                                        {%
+                                        if
+                                        motorStatus=="HIGH"
+                                        %}disabled{%
+                                        endif
+                                        %}
+                                        onclick="motorController('HIGH')"
+                                    > HIGH
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card border-0 mx-auto" style="max-width: 400px; height: 50vh; box-shadow: 0px 2px 17px 0px rgba(0, 0, 0, 0.2);">
+                    <div class="container card-body">
+                        <div class="control-buttons">
+                            <button class="arrow-button btn btn-primary" style="font-size: 5vh;"onmousedown="move('up')" {%
+                                if motorStatus=="OFF"
+                                %}disabled{%
+                                endif
+                            %}>↑</button>
+                        </div>
+
+                        <div class="control-buttons">
+                            <button class="arrow-button btn btn-primary" style="font-size: 5vh" onmousedown="move('left')" {%
+                                if motorStatus=="OFF"
+                                %}disabled{%
+                                endif
+                            %}>←</button>
+                            <button class="arrow-button btn btn-primary" style="font-size: 5vh" onmousedown="move('down')" {%
+                                if motorStatus=="OFF"
+                                %}disabled{%
+                                endif
+                            %}>↓</button>
+                            <button class="arrow-button btn btn-primary" style="font-size: 5vh" onmousedown="move('right')" {%
+                                if motorStatus=="OFF"
+                                %}disabled{%
+                                endif
+                            %}>→</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Other HTML code -->
-
-    <script>
-        var motorStatus = "{{motorStatus}}";
-        var modeStatus = "{{modeStatus}}";
-        var powerStatus = "{{powerStatus}}";
-
-        function motorController(dataToSend) {
-            fetch("/controller", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                },
-                body: "button_data=" + encodeURIComponent(dataToSend),
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    motorStatus = data.motorStatus;
-
-                    document.getElementById("motorStatus").innerText = "Motors: " + data.motorStatus;
-
-                    document.getElementById("onButton").disabled = data.motorStatus === "ON";
-                    document.getElementById("offButton").disabled = data.motorStatus === "OFF";
-
-                    const arrowButtons = document.querySelectorAll('.arrow-button');
-                    arrowButtons.forEach(button => button.disabled = (data.motorStatus === "OFF" || modeStatus === "AUTO"));
-                })
-                .catch((error) => {
-                    console.error("Error sending data to server:", error);
-                });
-        }
-
-        function modeController(modeType) {
-            fetch("/controller", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                },
-                body: "modeStatus=" + encodeURIComponent(modeType),
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    modeStatus = data.modeStatus;
-
-                    document.getElementById("modeStatus").innerText = "Mode: " + data.modeStatus;
-
-                    document.getElementById("manualButton").disabled = data.modeStatus === "MANUAL";
-                    document.getElementById("autoButton").disabled = data.modeStatus === "AUTO";
-                    
-                    const arrowButtons = document.querySelectorAll('.arrow-button');
-                    arrowButtons.forEach(button => button.disabled = (motorStatus === "OFF" || data.modeStatus === "AUTO"));
-                })
-                .catch((error) => {
-                    console.error("Error sending data to server:", error);
-                });
-        }
-
-        function powerController(power) {
-            fetch("/controller", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                },
-                body: "powerStatus=" + encodeURIComponent(power),
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    powerStatus = data.powerStatus;
-
-                    document.getElementById("powerStatus").innerText = "Power: " + data.powerStatus;
-
-                    document.getElementById("lowButton").disabled = data.powerStatus === "LOW";
-                    document.getElementById("midButton").disabled = data.powerStatus === "MID";
-                    document.getElementById("highButton").disabled = data.powerStatus === "HIGH";
-                })
-                .catch((error) => {
-                    console.error("Error sending data to server:", error);
-                });
-        }
-
-        function move(direction) {
-            fetch("/controller", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/x-www-form-urlencoded",
-                },
-                body: "direction=" + encodeURIComponent(direction),
-            }).then((response) => response.json())
-        }
-
-        document.addEventListener('keydown', function (event) {
-            if (motorStatus === "OFF" || modeStatus === "AUTO") {
-                return;
-            }
-            switch (event.key) {
-                case 'ArrowUp':
-                    event.preventDefault();
-                    move('forward');
-                    break;
-                case 'ArrowDown':
-                    event.preventDefault();
-                    move('backward');
-                    break;
-                case 'ArrowLeft':
-                    event.preventDefault();
-                    move('left');
-                    break;
-                case 'ArrowRight':
-                    event.preventDefault();
-                    move('right');
-                    break;
-            }
-        });
-
-    </script>
+    <!-- Include the JavaScript file -->
+    <script src="./javascript/controller.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
 </html>
