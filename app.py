@@ -1,4 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, session, jsonify
+import os
+import signal
+import subprocess
+from run import process_req
+
 app = Flask(__name__)
 app.secret_key = 'secret'
 
@@ -35,13 +40,13 @@ def controller():
         powerStatus = request.form.get('powerStatus')
         
         if motorStatus:
-            print(motorStatus)
+            process_req(motorStatus)
         if modeStatus:
-            print(modeStatus)
+            process_req(modeStatus)
         if powerStatus:
-            print(powerStatus)
+            process_req(powerStatus)
         if direction:
-            print(direction)
+            process_req(direction)
 
         return jsonify({'motorStatus': motorStatus, 'modeStatus':modeStatus, 'powerStatus':powerStatus})
     return render_template('controller.html', motorStatus=motorStatus, modeStatus=modeStatus, powerStatus=powerStatus)

@@ -239,28 +239,49 @@
             }).then((response) => response.json())
         }
 
+        const keyState = {
+            ArrowUp: false,
+            ArrowDown: false,
+            ArrowLeft: false,
+            ArrowRight: false,
+        };
+
         document.addEventListener('keydown', function (event) {
             if (motorStatus === "OFF" || modeStatus === "AUTO") {
                 return;
             }
-            switch (event.key) {
-                case 'ArrowUp':
+
+            // Update key state when a key is pressed
+            keyState[event.key] = true;
+
+            // Check for combinations
+            if (keyState.ArrowUp) {
+                if (!keyState.ArrowLeft &&  !keyState.ArrowRight){
                     event.preventDefault();
                     move('forward');
-                    break;
-                case 'ArrowDown':
+                }
+                if (keyState.ArrowLeft) {
                     event.preventDefault();
-                    move('backward');
-                    break;
-                case 'ArrowLeft':
+                    move('forward-left');
+                } else if (keyState.ArrowRight) {
                     event.preventDefault();
-                    move('left');
-                    break;
-                case 'ArrowRight':
-                    event.preventDefault();
-                    move('right');
-                    break;
+                    move('forward-right');
+                }
+            } else if (keyState.ArrowLeft) {
+                event.preventDefault();
+                move('left');
+            } else if (keyState.ArrowRight) {
+                event.preventDefault();
+                move('right');
+            } else if (keyState.ArrowDown) {
+                event.preventDefault();
+                move('backward');
             }
+        });
+
+        document.addEventListener('keyup', function (event) {
+            // Update key state when a key is released
+            keyState[event.key] = false;
         });
 
     </script>
