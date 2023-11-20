@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IC2 Controller</title>
+    <link
+    rel="stylesheet"
+    href="{{url_for('static', filename='controller.css')}}"
+/>
     <style>
         .container {
             margin-top: 100px;
@@ -25,100 +29,106 @@
 </head>
 <body>
     <h1>Controller Page</h1>
-    <div style="margin-bottom: 30px;">
-        <p id="motorStatus">Motors: {{motorStatus}}</p>
-        <button
-            id="onButton"
-            {%
-            if
-            motorStatus=="ON"
-            %}disabled{%
-            endif
-            %}
-            onclick="motorController('ON')"
-        >
-            ON
-        </button>
-        <button
-            id="offButton"
-            {%
-            if
-            motorStatus=="OFF"
-            %}disabled{%
-            endif
-            %}
-            onclick="motorController('OFF')"
-        >
-            OFF
-        </button>
-    </div>
+    <!-- <div>
+        <button onclick="motorController('ON')" id="onButton">ON</button>
+        <button onclick="motorController('OFF')" id="offButton">OFF</button>
+    </div> -->
+    <div style="margin-left: 15%">
+        <div style="margin-bottom: 30px; padding-top: 50px;">
+            <p>Motors: <span  id="motorStatus">{{motorStatus}}</span></p>
+            <button
+                id="onButton"
+                {%
+                if
+                motorStatus=="ON"
+                %}disabled{%
+                endif
+                %}
+                onclick="motorController('ON')"
+            >
+                ON
+            </button>
+            <button
+                id="offButton"
+                {%
+                if
+                motorStatus=="OFF"
+                %}disabled{%
+                endif
+                %}
+                onclick="motorController('OFF')"
+            >
+                OFF
+            </button>
+        </div>
 
-    <div style="margin-bottom: 30px;">
-        <p id="modeStatus">Mode: {{modeStatus}}</p>
-        <button
-            id="manualButton"
-            {%
-            if
-            modeStatus=="MANUAL"
-            %}disabled{%
-            endif
-            %}
-            onclick="modeController('MANUAL')"
-        >
-            MANUAL
-        </button>
-        <button
-            id="autoButton"
-            {%
-            if
-            modeStatus=="AUTO"
-            %}disabled{%
-            endif
-            %}
-            onclick="modeController('AUTO')"
-        >
-            AUTOMATIC
-        </button>
-    </div>
+        <div style="margin-bottom: 30px;">
+            <p >Mode: <span id="modeStatus">{{modeStatus}}</span></p>
+            <button
+                id="manualButton"
+                {%
+                if
+                modeStatus=="MANUAL"
+                %}disabled{%
+                endif
+                %}
+                onclick="modeController('MANUAL')"
+            >
+                MANUAL
+            </button>
+            <button
+                id="autoButton"
+                {%
+                if
+                modeStatus=="AUTO"
+                %}disabled{%
+                endif
+                %}
+                onclick="modeController('AUTO')"
+            >
+                AUTOMATIC
+            </button>
+        </div>
 
-    <div>
-        <p id="powerStatus">Power: {{powerStatus}}</p>
-        <button
-            id="lowButton"
-            {%
-            if
-            powerStatus=="LOW"
-            %}disabled{%
-            endif
-            %}
-            onclick="powerController('LOW')"
-        >
-            LOW
-        </button>
-        <button
-            id="midButton"
-            {%
-            if
-            powerStatus=="MID"
-            %}disabled{%
-            endif
-            %}
-            onclick="powerController('MID')"
-        >
-            MID
-        </button>
-        <button
-        id="highButton"
-        {%
-        if
-        powerStatus=="HIGH"
-        %}disabled{%
-        endif
-        %}
-        onclick="powerController('HIGH')"
-    >
-        HIGH
-    </button>
+        <div>
+            <p>Power: <span id="powerStatus">{{powerStatus}}</span></p>
+            <button
+                id="lowButton"
+                {%
+                if
+                powerStatus=="LOW"
+                %}disabled{%
+                endif
+                %}
+                onclick="powerController('LOW')"
+            >
+                LOW
+            </button>
+            <button
+                id="midButton"
+                {%
+                if
+                powerStatus=="MID"
+                %}disabled{%
+                endif
+                %}
+                onclick="powerController('MID')"
+            >
+                MID
+            </button>
+            <button
+                id="highButton"
+                {%
+                if
+                powerStatus=="HIGH"
+                %}disabled{%
+                endif
+                %}
+                onclick="powerController('HIGH')"
+            >
+                HIGH
+            </button>
+        </div>
     </div>
 
     <div class="container">
@@ -168,7 +178,7 @@
                 .then((data) => {
                     motorStatus = data.motorStatus;
 
-                    document.getElementById("motorStatus").innerText = "Motors: " + data.motorStatus;
+                    document.getElementById("motorStatus").innerText = data.motorStatus;
 
                     document.getElementById("onButton").disabled = data.motorStatus === "ON";
                     document.getElementById("offButton").disabled = data.motorStatus === "OFF";
@@ -193,7 +203,7 @@
                 .then((data) => {
                     modeStatus = data.modeStatus;
 
-                    document.getElementById("modeStatus").innerText = "Mode: " + data.modeStatus;
+                    document.getElementById("modeStatus").innerText = data.modeStatus;
 
                     document.getElementById("manualButton").disabled = data.modeStatus === "MANUAL";
                     document.getElementById("autoButton").disabled = data.modeStatus === "AUTO";
@@ -218,7 +228,7 @@
                 .then((data) => {
                     powerStatus = data.powerStatus;
 
-                    document.getElementById("powerStatus").innerText = "Power: " + data.powerStatus;
+                    document.getElementById("powerStatus").innerText = data.powerStatus;
 
                     document.getElementById("lowButton").disabled = data.powerStatus === "LOW";
                     document.getElementById("midButton").disabled = data.powerStatus === "MID";

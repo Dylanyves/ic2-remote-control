@@ -1,0 +1,63 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    /* center everything */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* make it take up the whole screen */
+    height: 100vh;
+    border: 2px solid black;
+}
+
+.title {
+    font-size: 56px;
+    font-weight: bold;
+    color: green;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.login_page_url {
+    font-size: 20px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    background-color: green;
+    color: white;
+    text-align: center;
+    width: fit-content;
+    padding: 10px 20px; /* Adjust padding for better appearance */
+    border-radius: 50px; /* Adjust border-radius for a more rounded appearance */
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    border: 2px solid white;
+    transition: 500ms ease;
+}
+
+.login_page_url:hover {
+    color: green;
+    background-color: white;
+    border: 2px solid green;
+}
+
+div {
+    margin-top: -100px;
+}
+
+/* At mobile size make the title smaller */
+@media only screen and (max-width: 640px) {
+    .title {
+        font-size: 32px;
+    }
+    .login_page_url {
+        font-size: 14px;
+    }
+}

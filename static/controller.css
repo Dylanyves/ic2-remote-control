@@ -1,0 +1,55 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1 {
+    font-size: 42px;
+    font-weight: bold;
+    color: green;
+    text-align: center;
+    margin: 20px;
+    margin-top: 30px;
+}
+
+p {
+    margin-bottom: 5px;
+}
+
+span {
+    font-weight: bold;
+}
+
+button {
+    cursor: pointer;
+    background-color: white;
+    color: green;
+    padding: 7px 15px;
+    border-radius: 10px;
+    border: 2px solid green;
+}
+
+button.arrow-button {
+    font-weight: bold;
+    padding: 20px;
+}
+
+button:hover {
+    background-color: green;
+    color: white;
+}
+
+button:disabled {
+    background-color: green;
+    color: white;
+}
+
+button:active {
+    background-color: green;
+    color: white;
+}
