@@ -33,6 +33,28 @@ def controller():
     motorStatus = "OFF"
     modeStatus = "AUTO"
     powerStatus = "LOW"
+    languages = [
+        "English (US)",
+        "Spanish (Spain)",
+        "French (France)",
+        "German (Germany)",
+        "Italian (Italy)",
+        "Japanese",
+        "Korean",
+        "Russian",
+        "Chinese (Hong Kong)",
+        "Arabic",
+        "Thai",
+        "Portuguese (Portugal)",
+        "Dutch (Netherlands)",
+        "Swedish (Sweden)",
+        "Turkish (Turkey)",
+        "Hindi",
+        "Vietnamese",
+        "Finnish (Finland)",
+        "Indonesian (Indonesia)"
+    ]
+
     if request.method == 'POST':
         motorStatus = request.form.get('button_data')
         modeStatus = request.form.get('modeStatus')
@@ -49,7 +71,7 @@ def controller():
             process_req(direction)
 
         return jsonify({'motorStatus': motorStatus, 'modeStatus':modeStatus, 'powerStatus':powerStatus})
-    return render_template('controller.html', motorStatus=motorStatus, modeStatus=modeStatus, powerStatus=powerStatus)
+    return render_template('controller.html', motorStatus=motorStatus, modeStatus=modeStatus, powerStatus=powerStatus, languages=languages)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

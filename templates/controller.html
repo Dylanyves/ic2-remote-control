@@ -129,6 +129,16 @@
                 HIGH
             </button>
         </div>
+
+        <div>
+            <p>Language: <span id="language">{{language}}</span></p>
+            <select class="dropdown">
+
+                {% for language in languages %}
+                <option value="{{ language }}">{{ language }}</option>
+                {% endfor %}
+            </select>
+        </div>
     </div>
 
     <div class="container">
